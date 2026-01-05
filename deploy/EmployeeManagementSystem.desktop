@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Employee Management System
+Comment=Calculate weekly wages and tax
+Exec=EmployeeManagementSystemQt
+Icon=icon
+Categories=Office;
+Terminal=false

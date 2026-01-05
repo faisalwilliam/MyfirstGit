@@ -1,0 +1,9 @@
+Employee ID: 7
+Name: Sudane
+Hourly Wage: 140
+Weekly Wage: 5600
+Tax (30%): 1680
+Net Wage: 3920
+Annual Salary: 291200
+Weekly Work Time: 40:00
+Overtime Hours: 0

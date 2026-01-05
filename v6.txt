@@ -1,0 +1,9 @@
+Employee ID: 6
+Name: baga
+Hourly Wage: 140
+Weekly Wage: 5320
+Tax (20%): 1064
+Net Wage: 4256
+Annual Salary: 276640
+Weekly Work Time: 38:00
+Overtime Hours: 0

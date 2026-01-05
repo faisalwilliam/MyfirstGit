@@ -1,0 +1,10 @@
+QMainWindow { background-color: #f4f4f9; }
+QGroupBox { font-weight: bold; border: 1px solid #dcdcdc; border-radius: 5px; margin-top: 10px; background-color: white; }
+QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; padding: 0 3px; left: 10px; color: #333; }
+QLabel { color: #2c3e50; font-size: 13px; }
+QLineEdit, QSpinBox, QDoubleSpinBox { padding: 5px; border: 1px solid #bdc3c7; border-radius: 3px; background-color: #ecf0f1; }
+QLineEdit:focus, QSpinBox:focus, QDoubleSpinBox:focus { border: 1px solid #3498db; background-color: white; }
+QPushButton { background-color: #3498db; color: white; border: none; padding: 8px 15px; border-radius: 4px; font-weight: bold; }
+QPushButton:hover { background-color: #2980b9; }
+QPushButton:pressed { background-color: #1f618d; }
+QTextEdit { border: 1px solid #bdc3c7; border-radius: 3px; background-color: white; font-family: monospace; }
