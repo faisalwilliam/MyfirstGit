@@ -1,38 +1,28 @@
-QT       += core gui widgets sql printsupport charts
-CONFIG   += c++17
-VERSION  = 1.0.0
+QT       += core gui sql widgets printsupport charts
 
-TARGET = EmployeeManagementSystemQt
+TARGET = EmployeeManagementSystem
 TEMPLATE = app
 
-SOURCES += main_qt.cpp \
-           MainWindow.cpp \
-           Employee.cpp \
-           Time.cpp \
-           SettingsDialog.cpp \
-           LoginDialog.cpp \
-           RegisterDialog.cpp \
-           ResetPasswordDialog.cpp \
-           ProfileDialog.cpp \
-           AdminDialog.cpp \
-           MyReportsDialog.cpp \
-           AdminReportsDialog.cpp
+# Use C++17 standard
+CONFIG += c++17
 
-HEADERS += MainWindow.h \
-           Employee.h \
-           Time.h \
-           SettingsDialog.h \
-           LoginDialog.h \
-           RegisterDialog.h \
-           ResetPasswordDialog.h \
-           ProfileDialog.h \
-           AdminDialog.h \
-           Utils.h \
-           MyReportsDialog.h \
-           AdminReportsDialog.h
+# Recursively include all source (.cpp) and header (.h) files
+SOURCES += $$files(*.cpp, true)
+HEADERS += $$files(*.h, true)
 
-RESOURCES += resources.qrc
+# Exclude Qt generated files to prevent build conflicts
+# (moc_*.cpp are generated from headers, qrc_*.cpp from resources)
+SOURCES -= $$files(moc_*.cpp, true)
+SOURCES -= $$files(qrc_*.cpp, true)
 
-win32 {
-    RC_ICONS = icon.ico
+# Handle Resources
+# If resources.qrc exists, use it to generate resources
+exists(resources.qrc) {
+    RESOURCES += resources.qrc
+} else:exists(qrc_resources.cpp) {
+    # Fallback: If resources.qrc is missing but qrc_resources.cpp exists, compile it directly
+    SOURCES += qrc_resources.cpp
 }
+
+# Include UI files if they exist
+FORMS += $$files(*.ui, true)

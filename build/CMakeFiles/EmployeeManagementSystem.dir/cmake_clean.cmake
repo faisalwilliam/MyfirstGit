@@ -1,0 +1,43 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/EmployeeManagementSystem_autogen.dir/AutogenUsed.txt"
+  "CMakeFiles/EmployeeManagementSystem_autogen.dir/ParseCache.txt"
+  "EmployeeManagementSystem_autogen"
+  "CMakeFiles/EmployeeManagementSystem.dir/AdminDialog.cpp.o"
+  "CMakeFiles/EmployeeManagementSystem.dir/AdminDialog.cpp.o.d"
+  "CMakeFiles/EmployeeManagementSystem.dir/AdminReportsDialog.cpp.o"
+  "CMakeFiles/EmployeeManagementSystem.dir/AdminReportsDialog.cpp.o.d"
+  "CMakeFiles/EmployeeManagementSystem.dir/Employee.cpp.o"
+  "CMakeFiles/EmployeeManagementSystem.dir/Employee.cpp.o.d"
+  "CMakeFiles/EmployeeManagementSystem.dir/EmployeeManagementSystem_autogen/EWIEGA46WW/qrc_resources.cpp.o"
+  "CMakeFiles/EmployeeManagementSystem.dir/EmployeeManagementSystem_autogen/EWIEGA46WW/qrc_resources.cpp.o.d"
+  "CMakeFiles/EmployeeManagementSystem.dir/EmployeeManagementSystem_autogen/mocs_compilation.cpp.o"
+  "CMakeFiles/EmployeeManagementSystem.dir/EmployeeManagementSystem_autogen/mocs_compilation.cpp.o.d"
+  "CMakeFiles/EmployeeManagementSystem.dir/LoginDialog.cpp.o"
+  "CMakeFiles/EmployeeManagementSystem.dir/LoginDialog.cpp.o.d"
+  "CMakeFiles/EmployeeManagementSystem.dir/MainWindow.cpp.o"
+  "CMakeFiles/EmployeeManagementSystem.dir/MainWindow.cpp.o.d"
+  "CMakeFiles/EmployeeManagementSystem.dir/MyReportsDialog.cpp.o"
+  "CMakeFiles/EmployeeManagementSystem.dir/MyReportsDialog.cpp.o.d"
+  "CMakeFiles/EmployeeManagementSystem.dir/ProfileDialog.cpp.o"
+  "CMakeFiles/EmployeeManagementSystem.dir/ProfileDialog.cpp.o.d"
+  "CMakeFiles/EmployeeManagementSystem.dir/RegisterDialog.cpp.o"
+  "CMakeFiles/EmployeeManagementSystem.dir/RegisterDialog.cpp.o.d"
+  "CMakeFiles/EmployeeManagementSystem.dir/ResetPasswordDialog.cpp.o"
+  "CMakeFiles/EmployeeManagementSystem.dir/ResetPasswordDialog.cpp.o.d"
+  "CMakeFiles/EmployeeManagementSystem.dir/SettingsDialog.cpp.o"
+  "CMakeFiles/EmployeeManagementSystem.dir/SettingsDialog.cpp.o.d"
+  "CMakeFiles/EmployeeManagementSystem.dir/Time.cpp.o"
+  "CMakeFiles/EmployeeManagementSystem.dir/Time.cpp.o.d"
+  "CMakeFiles/EmployeeManagementSystem.dir/main_qt.cpp.o"
+  "CMakeFiles/EmployeeManagementSystem.dir/main_qt.cpp.o.d"
+  "EmployeeManagementSystem"
+  "EmployeeManagementSystem.pdb"
+  "EmployeeManagementSystem_autogen/EWIEGA46WW/qrc_resources.cpp"
+  "EmployeeManagementSystem_autogen/mocs_compilation.cpp"
+  "EmployeeManagementSystem_autogen/timestamp"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/EmployeeManagementSystem.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

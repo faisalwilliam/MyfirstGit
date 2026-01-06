@@ -1,0 +1,5 @@
+/home/amir/MyfirstGit/build/CMakeFiles/EmployeeManagementSystem.dir
+/home/amir/MyfirstGit/build/CMakeFiles/edit_cache.dir
+/home/amir/MyfirstGit/build/CMakeFiles/rebuild_cache.dir
+/home/amir/MyfirstGit/build/CMakeFiles/EmployeeManagementSystem_autogen_timestamp_deps.dir
+/home/amir/MyfirstGit/build/CMakeFiles/EmployeeManagementSystem_autogen.dir

@@ -14,9 +14,6 @@
 #include <QProcess>
 #include <QStandardPaths>
 #include <QDateTime>
-#include <QTimer>
-#include <QCoreApplication>
-#include <QFile>
 #include <QDebug>
 
 LoginDialog::LoginDialog(QWidget *parent) : QDialog(parent) {
@@ -24,6 +21,26 @@ LoginDialog::LoginDialog(QWidget *parent) : QDialog(parent) {
     setFixedSize(300, 260);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
+
+    // Initialize Database
+    QSqlDatabase db = QSqlDatabase::database();
+    if (!db.isValid()) {
+        db = QSqlDatabase::addDatabase("QSQLITE");
+        db.setDatabaseName("employees.db");
+        if (!db.open()) {
+            QMessageBox::critical(this, "Database Error", "Could not open database: " + db.lastError().text());
+        } else {
+            QSqlQuery query;
+            query.exec("CREATE TABLE IF NOT EXISTS users (employee_id TEXT PRIMARY KEY, password TEXT, last_login TEXT, failed_attempts INTEGER DEFAULT 0, locked_until TEXT)");
+            query.exec("CREATE TABLE IF NOT EXISTS reports (id INTEGER PRIMARY KEY AUTOINCREMENT, employee_id TEXT, name TEXT, report_date TEXT, total_hours REAL, gross_wage REAL, tax REAL, net_wage REAL)");
+
+            // Insert default user for testing
+            QString defaultPassHash = QString(QCryptographicHash::hash(QByteArray("admin123"), QCryptographicHash::Sha256).toHex());
+            query.prepare("INSERT OR IGNORE INTO users (employee_id, password) VALUES ('EMP001', :pass)");
+            query.bindValue(":pass", defaultPassHash);
+            query.exec();
+        }
+    }
 
     QLabel *idLabel = new QLabel("Employee ID:", this);
     layout->addWidget(idLabel);
@@ -66,10 +83,6 @@ LoginDialog::LoginDialog(QWidget *parent) : QDialog(parent) {
     forgotBtn = new QPushButton("Forgot Password?", this);
     layout->addWidget(forgotBtn);
 
-    testConnBtn = new QPushButton("Test Connection", this);
-    layout->addWidget(testConnBtn);
-    connect(testConnBtn, &QPushButton::clicked, this, &LoginDialog::testConnection);
-
     connect(forgotBtn, &QPushButton::clicked, [this]() {
         ResetPasswordDialog resetDlg(this);
         resetDlg.exec();
@@ -84,8 +97,8 @@ LoginDialog::LoginDialog(QWidget *parent) : QDialog(parent) {
         QString id = idEdit->text().trimmed();
         QString pass = passwordEdit->text();
 
-        if (id.isEmpty()) {
-            QMessageBox::warning(this, "Login Failed", "Employee ID cannot be empty.");
+        if (id.isEmpty() || pass.isEmpty()) {
+            QMessageBox::warning(this, "Login Failed", "ID and Password cannot be empty.");
         } else {
             QSqlQuery query;
             query.prepare("SELECT password, failed_attempts, locked_until FROM users WHERE employee_id = :id");
@@ -114,15 +127,15 @@ LoginDialog::LoginDialog(QWidget *parent) : QDialog(parent) {
                         updateQuery.bindValue(":id", id);
                         updateQuery.exec();
 
-                    QSettings settings;
-                    if (rememberMeCheck->isChecked()) {
-                        settings.setValue("savedEmployeeId", id);
-                        settings.setValue("rememberMe", true);
-                    } else {
-                        settings.remove("savedEmployeeId");
-                        settings.setValue("rememberMe", false);
-                    }
-                    accept();
+                        QSettings settings;
+                        if (rememberMeCheck->isChecked()) {
+                            settings.setValue("savedEmployeeId", id);
+                            settings.setValue("rememberMe", true);
+                        } else {
+                            settings.remove("savedEmployeeId");
+                            settings.setValue("rememberMe", false);
+                        }
+                        accept();
                     } else {
                         failedAttempts++;
                         QSqlQuery updateQuery;
@@ -151,78 +164,6 @@ LoginDialog::LoginDialog(QWidget *parent) : QDialog(parent) {
             }
         }
     });
-
-    // Setup Progress Bar for Database Connection
-    progressBar = new QProgressBar(this);
-    progressBar->setRange(0, 0); // Indeterminate (Spinner effect)
-    progressBar->setTextVisible(true);
-    progressBar->setFormat("Connecting to Database...");
-    progressBar->setVisible(false);
-    layout->addWidget(progressBar);
-
-    // Trigger connection after UI is shown
-    QTimer::singleShot(100, this, &LoginDialog::connectToDatabase);
-}
-
-void LoginDialog::connectToDatabase() {
-    // Disable inputs while connecting
-    idEdit->setEnabled(false);
-    passwordEdit->setEnabled(false);
-    loginBtn->setEnabled(false);
-    registerBtn->setEnabled(false);
-    forgotBtn->setEnabled(false);
-    testConnBtn->setEnabled(false);
-    progressBar->setVisible(true);
-    
-    // Force UI update to show the spinner
-    QCoreApplication::processEvents();
-
-    // Initialize Database
-    QSqlDatabase db = QSqlDatabase::database();
-    if (!db.isValid()) {
-        db = QSqlDatabase::addDatabase("QSQLITE");
-        db.setDatabaseName("employees.db");
-
-        if (!db.open()) {
-            QMessageBox::critical(this, "Database Error", "Could not open database: " + db.lastError().text());
-        } else {
-            QSqlQuery query;
-            query.exec("CREATE TABLE IF NOT EXISTS users (employee_id TEXT PRIMARY KEY, password TEXT, last_login TEXT, failed_attempts INTEGER DEFAULT 0, locked_until TEXT)");
-            query.exec("ALTER TABLE users ADD COLUMN last_login TEXT");
-            query.exec("ALTER TABLE users ADD COLUMN failed_attempts INTEGER DEFAULT 0");
-            query.exec("ALTER TABLE users ADD COLUMN locked_until TEXT");
-            query.exec("CREATE TABLE IF NOT EXISTS reports (id INTEGER PRIMARY KEY AUTOINCREMENT, employee_id TEXT, name TEXT, report_date TEXT, total_hours REAL, gross_wage REAL, tax REAL, net_wage REAL)");
-
-            // Insert default user for testing
-            QString defaultPassHash = QString(QCryptographicHash::hash(QByteArray("admin123"), QCryptographicHash::Sha256).toHex());
-            query.prepare("INSERT OR IGNORE INTO users (employee_id, password) VALUES ('EMP001', :pass)");
-            query.bindValue(":pass", defaultPassHash);
-            query.exec();
-        }
-    }
-
-    progressBar->setVisible(false);
-    idEdit->setEnabled(true);
-    passwordEdit->setEnabled(true);
-    loginBtn->setEnabled(true);
-    registerBtn->setEnabled(true);
-    forgotBtn->setEnabled(true);
-    testConnBtn->setEnabled(true);
-}
-
-void LoginDialog::testConnection() {
-    QSqlDatabase db = QSqlDatabase::database();
-    if (db.isOpen()) {
-        QMessageBox::information(this, "Test Connection", "Database is already connected.");
-        return;
-    }
-
-    // If not open, try to open existing definition
-    if (db.open()) {
-        QMessageBox::information(this, "Test Connection", "Database connected successfully.");
-    } else {
-        QMessageBox::critical(this, "Test Connection", "Could not connect to database: " + db.lastError().text());
-    }
 }
 
 QString LoginDialog::getEmployeeID() const {
