@@ -1,5 +1,6 @@
 QT       += core gui widgets sql printsupport charts
 CONFIG   += c++17
+VERSION  = 1.0.0
 
 TARGET = EmployeeManagementSystemQt
 TEMPLATE = app
