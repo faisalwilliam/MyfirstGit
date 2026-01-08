@@ -25,6 +25,11 @@ list(FILTER SOURCES EXCLUDE REGEX "/CMakeFiles/")
 list(FILTER SOURCES EXCLUDE REGEX "/build/")
 list(FILTER SOURCES EXCLUDE REGEX "_autogen/")
 list(FILTER SOURCES EXCLUDE REGEX "/BoilerROOM44\\.cpp$")
+list(FILTER SOURCES EXCLUDE REGEX "/emsdk/")
+
+# Also exclude emsdk and build files from headers to prevent AutoUic errors
+list(FILTER HEADERS EXCLUDE REGEX "/emsdk/")
+list(FILTER HEADERS EXCLUDE REGEX "/build/")
 
 add_executable(EmployeeManagementSystem
     ${SOURCES}

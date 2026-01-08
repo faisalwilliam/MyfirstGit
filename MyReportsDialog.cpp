@@ -216,6 +216,33 @@ void MyReportsDialog::exportSelectedToCSV() {
         return;
     }
 
+#ifdef Q_OS_WASM
+    QString content;
+    QTextStream out(&content);
+
+    // Headers
+    for (int i = 0; i < model->columnCount(); ++i) {
+        if (!tableView->isColumnHidden(i)) {
+            out << model->headerData(i, Qt::Horizontal).toString();
+            if (i < model->columnCount() - 1) out << ",";
+        }
+    }
+    out << "\n";
+
+    // Data
+    for (const QModelIndex &index : selected) {
+        for (int j = 0; j < model->columnCount(); ++j) {
+            if (!tableView->isColumnHidden(j)) {
+                out << model->data(model->index(index.row(), j)).toString();
+                if (j < model->columnCount() - 1) out << ",";
+            }
+        }
+        out << "\n";
+    }
+    QFileDialog::saveFileContent(content.toUtf8(), "my_reports.csv");
+    return;
+#endif
+
     QString fileName = QFileDialog::getSaveFileName(this, "Export CSV", "", "CSV Files (*.csv)");
     if (fileName.isEmpty()) return;
 

@@ -100,6 +100,32 @@ AdminDialog::AdminDialog(QWidget *parent) : QDialog(parent) {
 }
 
 void AdminDialog::exportToCSV() {
+#ifdef Q_OS_WASM
+    QString content;
+    QTextStream out(&content);
+    
+    while (model->canFetchMore())
+        model->fetchMore();
+
+    // Headers
+    for (int i = 0; i < model->columnCount(); ++i) {
+        out << model->headerData(i, Qt::Horizontal).toString();
+        if (i < model->columnCount() - 1) out << ",";
+    }
+    out << "\n";
+
+    // Data
+    for (int i = 0; i < model->rowCount(); ++i) {
+        for (int j = 0; j < model->columnCount(); ++j) {
+            out << model->data(model->index(i, j)).toString();
+            if (j < model->columnCount() - 1) out << ",";
+        }
+        out << "\n";
+    }
+    QFileDialog::saveFileContent(content.toUtf8(), "all_employees.csv");
+    return;
+#endif
+
     QString fileName = QFileDialog::getSaveFileName(this, "Export CSV", "", "CSV Files (*.csv)");
     if (fileName.isEmpty()) return;
 

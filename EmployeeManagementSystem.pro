@@ -1,6 +1,6 @@
 QT       += core gui sql widgets printsupport charts
 
-TARGET = EmployeeManagementSystem
+TARGET = EmployeeManagementSystemQt
 TEMPLATE = app
 
 # Use C++17 standard
@@ -8,12 +8,17 @@ CONFIG += c++17
 
 # Recursively include all source (.cpp) and header (.h) files
 SOURCES += $$files(*.cpp, true)
+SOURCES -= $$files(build/*.cpp, true)
+SOURCES -= $$files(emsdk/*.cpp, true)
 HEADERS += $$files(*.h, true)
+HEADERS -= $$files(build/*.h, true)
+HEADERS -= $$files(emsdk/*.h, true)
 
 # Exclude Qt generated files to prevent build conflicts
 # (moc_*.cpp are generated from headers, qrc_*.cpp from resources)
 SOURCES -= $$files(moc_*.cpp, true)
 SOURCES -= $$files(qrc_*.cpp, true)
+SOURCES -= BoilerROOM44.cpp
 
 # Handle Resources
 # If resources.qrc exists, use it to generate resources

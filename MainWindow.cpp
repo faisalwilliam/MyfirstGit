@@ -191,6 +191,13 @@ void MainWindow::saveReport() {
         return;
     }
 
+#ifdef Q_OS_WASM
+    // In WebAssembly, trigger a browser download directly
+    QByteArray data = content.toUtf8();
+    QFileDialog::saveFileContent(data, "report.txt");
+    QMessageBox::information(this, "Success", "Report download started.");
+    return;
+#else
     QString selectedFilter;
     QString fileName = QFileDialog::getSaveFileName(this, "Save Report", "", "Text Files (*.txt);;PDF Files (*.pdf)", &selectedFilter);
     if (fileName.isEmpty()) return;
@@ -211,6 +218,7 @@ void MainWindow::saveReport() {
             QMessageBox::critical(this, "Error", "Could not save file.");
         }
     }
+#endif
 }
 
 void MainWindow::saveToDatabase() {
